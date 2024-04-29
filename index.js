@@ -58,7 +58,7 @@ async function run() {
       res.send(result);
     });
 
-    //post a cradt item
+    //post a craft item
     app.post("/crafts", async (req, res) => {
       const newCraft = req.body;
       console.log(newCraft);
@@ -81,7 +81,7 @@ async function run() {
       res.send(result);
     });
 
-    // update specific Tourists spot
+    // update specific craft item
     app.put("/crafts/:id", async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
@@ -111,6 +111,29 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await craftCollections.deleteOne(query);
+      res.send(result);
+    });
+
+    //post a category item
+    app.post("/categories", async (req, res) => {
+      const newCategoryInfo = req.body;
+      console.log(newCategoryInfo);
+      const result = await categoryCollections.insertOne(newCategoryInfo);
+      res.send(result);
+    });
+
+    //get all category
+    app.get("/categories", async (req, res) => {
+      const cursor = categoryCollections.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    //get a category by id
+    app.get("/categories/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await categoryCollections.findOne(query);
       res.send(result);
     });
 
