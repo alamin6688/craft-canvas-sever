@@ -33,7 +33,7 @@ async function run() {
       .db("craftCanvus")
       .collection("categories");
 
-    //** Operations */
+    // CURD Operations:-
 
     //  Post a User to mongodb
     app.post("/users", async (req, res) => {
