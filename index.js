@@ -33,37 +33,32 @@ async function run() {
       .db("craftCanvus")
       .collection("categories");
 
+    //** Operations */
 
-      //** Operations */
-
-
-      //  Post a User to mongodb
+    //  Post a User to mongodb
     app.post("/users", async (req, res) => {
-        const user = req.body;
-        console.log(user);
-        const result = await userCollections.insertOne(user);
-        res.send(result);
-      });
-  
-      //get users
-      app.get("/users", async (req, res) => {
-        const cursor = userCollections.find();
-        const result = await cursor.toArray();
-        res.send(result);
-      });
-  
-      //get specified user
-      app.get("/users/:id", async (req, res) => {
-        const id = req.params.id;
-        const query = { _id: new ObjectId(id) };
-        const result = await userCollections.findOne(query);
-        res.send(result);
-      });
+      const user = req.body;
+      console.log(user);
+      const result = await userCollections.insertOne(user);
+      res.send(result);
+    });
 
+    //get users
+    app.get("/users", async (req, res) => {
+      const cursor = userCollections.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
 
+    //get specified user
+    app.get("/users/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await userCollections.findOne(query);
+      res.send(result);
+    });
 
-      
-      //post a cradt item
+    //post a cradt item
     app.post("/crafts", async (req, res) => {
       const newCraft = req.body;
       console.log(newCraft);
@@ -73,35 +68,51 @@ async function run() {
 
     //get all crafts
     app.get("/crafts", async (req, res) => {
-      const cursor= craftCollections.find();
-      const result= await cursor.toArray();
+      const cursor = craftCollections.find();
+      const result = await cursor.toArray();
       res.send(result);
     });
 
     //get a craft by id
     app.get("/crafts/:id", async (req, res) => {
       const id = req.params.id;
-      const query={ _id: new ObjectId(id) }
+      const query = { _id: new ObjectId(id) };
       const result = await craftCollections.findOne(query);
       res.send(result);
     });
 
+    // update specific Tourists spot
+    app.put("/crafts/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedCraft = req.body;
+      const craft = {
+        $set: {
+          itemName: updatedCraft.itemName,
+          subCategoryName: updatedCraft.subCategoryName,
+          rating: updatedCraft.rating,
+          description: updatedCraft.description,
+          price: updatedCraft.price,
+          customization: updatedCraft.customization,
+          processingTime: updatedCraft.processingTime,
+          stocStatus: updatedCraft.stocStatus,
+          name: updatedCraft.name,
+          email: updatedCraft.email,
+          image: updatedCraft.image,
+        },
+      };
+      const result = await craftCollections.updateOne(filter, craft, options);
+      res.send(result);
+    });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    //delete specific craft
+    app.delete("/crafts/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await craftCollections.deleteOne(query);
+      res.send(result);
+    });
 
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
