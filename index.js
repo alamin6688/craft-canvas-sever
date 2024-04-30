@@ -66,6 +66,8 @@ async function run() {
       res.send(result);
     });
 
+
+    
     //get all crafts items
     app.get("/crafts", async (req, res) => {
       const cursor = craftCollections.find();
